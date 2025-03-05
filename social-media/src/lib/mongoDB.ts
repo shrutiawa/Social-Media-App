@@ -4,7 +4,6 @@ export const connectionStr = `mongodb+srv://${db_username}:${db_password}@cluste
 import mongoose from "mongoose";
 
 
-
 if (!connectionStr) {
   throw new Error("❌ MongoDB URI is missing in environment variables!");
 }
