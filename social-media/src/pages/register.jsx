@@ -1,50 +1,86 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import validationSchema from "../utils/yup-validation";
 import RegisterForm from "../components/registerUI";
 import axios from "axios";
+import {toast} from "react-toastify"
+
+const initialState = {
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    DOB:  null,
+    gender: "",
+    password: "",
+    confirm_password: "",
+    errors: {},
+};
+
+const formReducer = (state, action) => {
+    switch (action.type) {
+        case "UPDATE_FIELD":
+            return { ...state, [action.field]: action.value };
+        case "SET_ERRORS":
+            return { ...state, errors: action.errors };
+        case "RESET":
+            return initialState;
+        default:
+            return state;
+    }
+};
 
 const RegisterService = () => {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-        confirm_password: "",
-    });
+    // Step 3: Use useReducer Hook
+    const [state, dispatch] = useReducer(formReducer, initialState);
 
-    const [errors, setErrors] = useState({});
-
-    // Handle input change with validation
+    // Step 4: Handle Input Change with Validation
     const handleChange = async (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+
+        dispatch({ type: "UPDATE_FIELD", field: name, value });
 
         try {
             await validationSchema.validateAt(name, { [name]: value });
-            setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+            dispatch({ type: "SET_ERRORS", errors: { ...state.errors, [name]: "" } });
         } catch (err) {
-            setErrors((prevErrors) => ({ ...prevErrors, [name]: err.message }));
+            dispatch({ type: "SET_ERRORS", errors: { ...state.errors, [name]: err.message } });
         }
     };
 
-    // Handle form submission
+    // Handle Form Submission
     const handleSubmit = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
         try {
-            console.log("Sending request...");
-            const { data } = await axios.post("/api/auth/Register/route", formData);
+            await validationSchema.validate(state, { abortEarly: false }); 
+            await axios.post("/api/auth/Register/route", state);
+            toast.success("User added successfully!!")
 
-            console.log("Response from API:", data);
-
-            setFormData({ name: "", email: "", password: "", confirm_password: "" });
-            setErrors({});
+            dispatch({ type: "RESET" });
         } catch (error) {
-            console.error("Error submitting form:", error.response?.data || error.message);
-            setErrors({ api: error.response?.data?.message || "Something went wrong." });
+            if (error.response) {
+                // API Error Response
+                toast.error(`${error.response.data.message} `);
+            }else if (error.inner) {  
+                const newErrors = {};
+                error.inner.forEach((err) => {
+                    newErrors[err.path] = err.message;
+                });
+                dispatch({ type: "SET_ERRORS", errors: newErrors });
+            } else {
+                toast.error("Something went wrong!");
+            }
         }
     };
 
-    return <RegisterForm formData={formData} errors={errors} handleChange={handleChange} handleSubmit={handleSubmit} />;
+    return (
+        <RegisterForm
+            formData={state}
+            errors={state.errors}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+        />
+    );
 };
 
 export default RegisterService;
