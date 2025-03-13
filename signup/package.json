@@ -1,5 +1,5 @@
 {
-  "name": "social-media",
+  "name": "signup",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,27 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "axios": "^1.8.1",
-    "bcrypt": "^5.1.1",
+    "axios": "^1.8.3",
     "bcryptjs": "^3.0.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.10.1",
-    "next": "15.1.7",
-    "next-auth": "^4.24.11",
-    "nodemailer": "^6.10.0",
+    "mongoose": "^8.12.1",
+    "next": "15.2.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-toastify": "^11.0.5",
+    "toastify": "^2.0.1",
     "yup": "^1.6.1"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.9",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^4",
     "typescript": "^5"
   }
 }
