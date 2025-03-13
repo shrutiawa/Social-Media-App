@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectDB } from "@/lib/mongoDB";
 import bcrypt from "bcryptjs"
-import { User } from "../../../../lib/model/user"
+import { User } from "../../../lib/model/user"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectDB();
