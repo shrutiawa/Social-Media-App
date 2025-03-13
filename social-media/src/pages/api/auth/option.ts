@@ -32,13 +32,13 @@ export const authOptions: AuthOptions = {
               throw new Error("Invalid credentials");
             }
     
-            const secret = process.env.NEXTAUTH_SECRET!;
+            const secret = process.env.NEXTAUTH_SECRET!; //it should generate dynamically 
             const token = jwt.sign(
               { id: user._id.toString(), email: user.email },
               secret,
               { expiresIn: "1h" }
             );
-    
+            
             return { id: user._id.toString(), name: user.name, email: user.email, token };
           },
         }),
@@ -66,7 +66,7 @@ export const authOptions: AuthOptions = {
         },
       },
       pages: {
-        signIn: "/login", 
+        signIn: "/login"
       },
       secret: process.env.NEXTAUTH_SECRET,
       session: {
