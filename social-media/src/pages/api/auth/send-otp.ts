@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { connectDB } from "@/lib/mongoDB";
 import nodemailer from "nodemailer";
 import { User } from "@/lib/model/user";
+import { Otp } from "@/lib/model/otp";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     await connectDB();
@@ -17,7 +18,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return res.status(400).json({ success: false, message: "Email not registered." });
         }
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
-        const expiresAt = new Date(Date.now() + 10 * 60 * 1000); 
+        const expiresAt = new Date(Date.now() + 5 * 60 * 1000); 
+
+         const newOtp = new Otp({
+          email,
+          otp,
+          expiresAt,
+        });
+
+        await newOtp.save();
    
         await User.updateOne(
           { email },
