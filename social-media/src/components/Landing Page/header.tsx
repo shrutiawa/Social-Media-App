@@ -1,7 +1,18 @@
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { FaBell, FaEnvelope, FaHome, FaSearch, FaUser } from "react-icons/fa";
 
 export const Header = () => {
+  const router = useRouter();
+
+  const navItems = [
+    { icon: <FaHome />, label: "Home", href: "/" },
+    { icon: <FaBell />, label: "Notifications" },
+    { icon: <FaEnvelope />, label: "Messages" },
+    { icon: <FaUser />, label: "Profile", href: "/Profile" },
+  ];
+
   return (
     <header className="w-full bg-white shadow h-auto">
       <div className="flex justify-between items-center px-4 md:px-6 py-4 overflow-x-auto whitespace-nowrap">
@@ -21,20 +32,24 @@ export const Header = () => {
 
           {/* Navigation */}
           <div className="flex gap-2 md:gap-4 text-gray-600 flex-nowrap">
-            {[
-              { icon: <FaHome />, label: "Home" },
-              { icon: <FaBell />, label: "Notifications" },
-              { icon: <FaEnvelope />, label: "Messages" },
-              { icon: <FaUser />, label: "Profile" },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-1 px-2 md:px-3 py-2 rounded-2xl hover:bg-gray-200 hover:text-blue-600 cursor-pointer"
-              >
-                {item.icon}
-                <span className="hidden lg:inline text-sm font-medium">{item.label}</span>
-              </div>
-            ))}
+            {navItems.map((item, index) =>
+              item.href ? (
+                <Link key={index} href={item.href} passHref legacyBehavior>
+                  <a className="flex items-center gap-1 px-2 md:px-3 py-2 rounded-2xl hover:bg-gray-200 hover:text-blue-600 cursor-pointer">
+                    {item.icon}
+                    <span className="hidden lg:inline text-sm font-medium">{item.label}</span>
+                  </a>
+                </Link>
+              ) : (
+                <div
+                  key={index}
+                  className="flex items-center gap-1 px-2 md:px-3 py-2 rounded-2xl hover:bg-gray-200 hover:text-blue-600 cursor-pointer"
+                >
+                  {item.icon}
+                  <span className="hidden lg:inline text-sm font-medium">{item.label}</span>
+                </div>
+              )
+            )}
           </div>
         </div>
 

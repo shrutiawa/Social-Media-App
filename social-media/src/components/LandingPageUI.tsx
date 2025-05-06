@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Landing Page/header";
 import { SidePanel } from "@/components/Landing Page/SidePanel";
 import { CenterPanel } from "@/components/Landing Page/CenterPanel";
@@ -6,16 +5,17 @@ import { Card } from "@/components/Landing Page/Card";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/router"; 
 
 export default function LandingPage() {
     const [news, setNews] = useState([]);
-
+    const router = useRouter(); 
 
     useEffect(() => {
         async function fetchTrendingNews() {
             try {
                 const res = await axios.get("/api/trendingNews");
-                console.log("response i am getting",res)
+                console.log("response i am getting", res);
                 setNews(res.data);
             } catch (err) {
                 console.error(err);
@@ -24,19 +24,21 @@ export default function LandingPage() {
 
         fetchTrendingNews();
     }, []);
+
     const shortcuts = [
         { src: "/image-20240911-061331.png", label: "Art and drawing" },
         { src: "/image-20240911-061331.png", label: "Dribbble Pro" },
         { src: "/image-20240911-061331.png", label: "Behance Creative" },
         { src: "/image-20240911-061331.png", label: "One Piece Fan" },
     ];
+
     const users = [
-        { src: "/image-20240911-061331.png", label: "Najid", follow: "Followed" ,people:"Followed by hermoine"},
-        { src: "/image-20240911-061331.png", label: "Ron Wisely", follow: "Followed",people:"Followed by hii" },
-        { src: "/image-20240911-061331.png", label: "Harry Potter", follow: "Follow" ,people:"Followed by she"},
-        { src: "/image-20240911-061331.png", label: "MrBean", follow: "Follow",people:"Followed by some" },
+        { src: "/image-20240911-061331.png", label: "Najid", follow: "Followed", people: "Followed by hermoine" },
+        { src: "/image-20240911-061331.png", label: "Ron Wisely", follow: "Followed", people: "Followed by hii" },
+        { src: "/image-20240911-061331.png", label: "Harry Potter", follow: "Follow", people: "Followed by she" },
+        { src: "/image-20240911-061331.png", label: "MrBean", follow: "Follow", people: "Followed by some" },
     ];
-console.log("i ma news",news)
+
     const leftTopContent = (
         <Card>
             <div className="relative bg-white rounded-[20px] text-center pb-5 w-full max-w-xs mx-auto">
@@ -76,7 +78,10 @@ console.log("i ma news",news)
                     </div>
                 </div>
 
-                <button className="bg-blue-600 text-white px-6 py-3 rounded-lg text-sm hover:bg-blue-800 transition duration-300">
+                <button
+                    onClick={() => router.push("/Profile")}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg text-sm hover:bg-blue-800 transition duration-300"
+                >
                     My Profile
                 </button>
             </div>
@@ -104,8 +109,8 @@ console.log("i ma news",news)
         <Card>
             <h2 className="text-lg font-semibold mb-4">Trending News</h2>
             <div className="flex flex-col gap-4">
-                {news.slice(0,5).map((item, index) => (
-                    <a 
+                {news.slice(0, 5).map((item, index) => (
+                    <a
                         key={index}
                         href={item.url}
                         target="_blank"
@@ -114,12 +119,12 @@ console.log("i ma news",news)
                     >
                         {item.urlToImage && (
                             <Image
-                            src={`/api/image-proxy?url=${encodeURIComponent(item.urlToImage)}`}
-                            alt={item.title}
-                            width={40}
-                            height={40}
-                            className="rounded-md object-cover"
-                          />
+                                src={`/api/image-proxy?url=${encodeURIComponent(item.urlToImage)}`}
+                                alt={item.title}
+                                width={40}
+                                height={40}
+                                className="rounded-md object-cover"
+                            />
                         )}
                         <p className="text-sm font-medium">{item.title}</p>
                     </a>
@@ -140,16 +145,14 @@ console.log("i ma news",news)
                         <div className="flex items-center gap-3">
                             <Image src={item.src} alt={item.label} width={40} height={40} className="rounded-full" />
                             <div>
-                            <p className="text-sm font-medium">{item.label}</p>
-                            <p className="text-[10px] ">{item.people}</p>
+                                <p className="text-sm font-medium">{item.label}</p>
+                                <p className="text-[10px]">{item.people}</p>
                             </div>
                         </div>
                         <button
-                            className={`text-sm font-medium px-4 py-2 rounded-2xl transition
-    ${item.follow === "Follow"
-                                    ? "text-blue-600 "
-                                    : "text-black-300"
-                                }`}
+                            className={`text-sm font-medium px-4 py-2 rounded-2xl transition ${
+                                item.follow === "Follow" ? "text-blue-600" : "text-black-300"
+                            }`}
                         >
                             {item.follow}
                         </button>
