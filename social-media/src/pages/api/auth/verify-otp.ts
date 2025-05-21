@@ -12,7 +12,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await connectDB();
 
         const otpDoc = await Otp.findOne({ email }).sort({ createdAt: -1 });
-        console.log("otp doc",otpDoc)
 
         if (!otpDoc) {
             return res.status(400).json({ success: false, message: "No OTP generated." });

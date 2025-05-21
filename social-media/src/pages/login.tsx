@@ -29,9 +29,10 @@ const Login = () => {
       setMessage(null);
 
       const result = await signIn("credentials", {
-        redirect: false,
+        // redirect: false,
         email: formData.email,
         password: formData.password,
+        callbackUrl: "/",
       })
       
       console.log("NextAuth SignIn Response:", result);

@@ -71,6 +71,7 @@ const RegisterForm = ({ formData, handleChange, handleSubmit, errors }: any) => 
                             />
                             {errors.DOB && <p className="text-red-500 text-sm">{errors.DOB}</p>}
                         </div>
+                        
 
                         <div>
                             <label className="text-gray-600 text-sm mb-2 block">GENDER</label>

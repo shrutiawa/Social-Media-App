@@ -14,7 +14,6 @@ export default async function handler(
       url: article.url,
       urlToImage: article.urlToImage,
     }));
-console.log("articles",articles)
     res.status(200).json(articles);
   } catch (error: any) {
     console.error(error.message);

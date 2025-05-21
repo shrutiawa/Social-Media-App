@@ -15,7 +15,6 @@ export default function LandingPage() {
         async function fetchTrendingNews() {
             try {
                 const res = await axios.get("/api/trendingNews");
-                console.log("response i am getting", res);
                 setNews(res.data);
             } catch (err) {
                 console.error(err);
